@@ -1,20 +1,76 @@
-from .models import Job, JobCategory, Company, JobApplication
-from rest_framework import generics, viewsets
+from rest_framework import  viewsets, permissions, status
+from .models import Application, Job, JobCategory, Company
+from rest_framework.views import APIView
+from rest_framework import generics, viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import viewsets, permissions, status
+from .permissions import IsEmployer, IsOwnerOrReadOnly, IsJobSeeker
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 from .serializers import (
+    ApplicationSerializer,
     JobSerializer,
     JobCategorySerializer,
     CompanySerializer,
-    JobApplicationSerializer,
+    ApplicationSerializer,
     RegisterSerializer,
 )
 
 User = get_user_model()
 
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist() 
+            return Response({"detail": "Successfully logged out."}, status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"detail": "Invalid or expired refresh token."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ApplicationViewSet(viewsets.ModelViewSet):
+    serializer_class = ApplicationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if hasattr(user, 'role') and user.role == 'employer':
+            return Application.objects.filter(job__company__owner=user)
+        return Application.objects.filter(applicant=user)
+
+    def perform_create(self, serializer):
+        serializer.save(applicant=self.request.user)
+
+    @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated])
+    def update_status(self, request, pk=None):
+        application = self.get_object()
+        
+        if application.job.company.owner != request.user:
+            return Response(
+                {"detail": "You do not have permission to update this application status."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        new_status = request.data.get('status')
+        if new_status not in ['PENDING', 'ACCEPTED', 'REJECTED']:
+            return Response(
+                {"detail": "Invalid status option."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        application.status = new_status
+        application.save()
+        return Response({"detail": f"Application status updated to {new_status}."})
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
@@ -38,15 +94,23 @@ class CompanyViewSet(viewsets.ModelViewSet):
 class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all().order_by('-created_at')
     serializer_class = JobSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsEmployer, IsOwnerOrReadOnly]
+    
+    filter_backends = [
+        DjangoFilterBackend, 
+        filters.SearchFilter, 
+        filters.OrderingFilter
+    ]
+    filterset_fields = ['category', 'company']
+    ordering_fields = ['created_at', 'salary']
+    ordering = ['-created_at']
 
     def perform_create(self, serializer):
-        user = self.request.user if self.request.user.is_authenticated else User.objects.first()
-        serializer.save(posted_by=user)
+        serializer.save(created_by=self.request.user)
 
-class JobApplicationViewSet(viewsets.ModelViewSet):
-    queryset = JobApplication.objects.all()
-    serializer_class = JobApplicationSerializer
+class ApplicationViewSet(viewsets.ModelViewSet):
+    queryset = Application.objects.all()
+    serializer_class = ApplicationSerializer
     permission_classes = [AllowAny]
 
     def perform_create(self, serializer):

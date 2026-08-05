@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Job, JobCategory, Company, JobApplication
+from .models import Job, JobCategory, Company, Application
 
 User = get_user_model()
 
@@ -14,16 +14,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'first_name', 'last_name']
-
+        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'role']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
     def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data.get('email', ''),
-            password=validated_data['password'],
-            first_name=validated_data.get('first_name', ''),
-            last_name=validated_data.get('last_name', '')
-        )
+        user = User.objects.create_user(**validated_data)
         return user
     
 class JobCategorySerializer(serializers.ModelSerializer):
@@ -38,14 +34,16 @@ class CompanySerializer(serializers.ModelSerializer):
 
 class JobSerializer(serializers.ModelSerializer):
     posted_by = serializers.ReadOnlyField(source='posted_by.username')
+    created_by = serializers.ReadOnlyField(source='created_by.username')
+    read_only_fields = ['created_by']
 
     class Meta:
         model = Job
         fields = '__all__'
 
-class JobApplicationSerializer(serializers.ModelSerializer):
+class ApplicationSerializer(serializers.ModelSerializer):
     applicant = serializers.ReadOnlyField(source='applicant.username')
 
     class Meta:
-        model = JobApplication
+        model = Application
         fields = '__all__'
