@@ -2,8 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
-class User(AbstractUser):
-    pass
+class Role(models.TextChoices):
+    EMPLOYER = 'EMPLOYER', 'Employer'
+    JOB_SEEKER = 'JOB_SEEKER', 'Job Seeker'
 
 class JobCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -41,19 +42,33 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
-
-class JobApplication(models.Model):
-    STATUS_CHOICES = (
-        ('PENDING', 'Pending'),
-        ('REVIEWING', 'Reviewing'),
-        ('ACCEPTED', 'Accepted'),
-        ('REJECTED', 'Rejected'),
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE
     )
 
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
-    applicant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='my_applications')
-    resume_notes = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+class User(AbstractUser):
+    class Role(models.TextChoices):
+        EMPLOYER = 'EMPLOYER', 'Employer'
+        JOB_SEEKER = 'JOB_SEEKER', 'Job Seeker'
+
+    role = models.CharField(
+        max_length=20,
+        choices=Role.choices,
+        default=Role.JOB_SEEKER,
+    )
+
+class Application(models.Model):
+    class StatusChoices(models.TextChoices):
+        PENDING = 'PENDING', 'Pending'
+        ACCEPTED = 'ACCEPTED', 'Accepted'
+        REJECTED = 'REJECTED', 'Rejected'
+
+    job = models.ForeignKey('Job', on_delete=models.CASCADE, related_name='applications')
+    applicant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='applications')
+    resume = models.FileField(upload_to='resumes/') 
+    cover_letter = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.PENDING)
     applied_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -61,3 +76,4 @@ class JobApplication(models.Model):
 
     def __str__(self):
         return f"{self.applicant.username} - {self.job.title}"
+    
