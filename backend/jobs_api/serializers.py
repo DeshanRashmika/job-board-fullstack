@@ -33,13 +33,12 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class JobSerializer(serializers.ModelSerializer):
-    posted_by = serializers.ReadOnlyField(source='posted_by.username')
-    created_by = serializers.ReadOnlyField(source='created_by.username')
-    read_only_fields = ['created_by']
+    company_name = serializers.ReadOnlyField(source='company.username') 
 
     class Meta:
         model = Job
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'salary', 'location', 'company', 'company_name', 'is_active', 'created_at']
+        read_only_fields = ['company', 'created_at']
 
 class ApplicationSerializer(serializers.ModelSerializer):
     applicant = serializers.ReadOnlyField(source='applicant.username')

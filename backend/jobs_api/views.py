@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import viewsets, permissions, status
-from .permissions import IsEmployer, IsOwnerOrReadOnly, IsJobSeeker
+from .permissions import IsEmployer, IsEmployerAndOwnerOrReadOnly, IsOwnerOrReadOnly, IsJobSeeker
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import action
@@ -71,6 +71,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         application.status = new_status
         application.save()
         return Response({"detail": f"Application status updated to {new_status}."})
+    
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
@@ -92,22 +93,35 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
 
 class JobViewSet(viewsets.ModelViewSet):
-    queryset = Job.objects.all().order_by('-created_at')
     serializer_class = JobSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsEmployer, IsOwnerOrReadOnly]
-    
-    filter_backends = [
-        DjangoFilterBackend, 
-        filters.SearchFilter, 
-        filters.OrderingFilter
-    ]
-    filterset_fields = ['category', 'company']
-    ordering_fields = ['created_at', 'salary']
-    ordering = ['-created_at']
+    permission_classes = [IsEmployerAndOwnerOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        
+        if user.is_authenticated and getattr(user, 'role', None) == 'employer':
+            if self.request.query_params.get('my_jobs') == 'true':
+                return Job.objects.filter(company=user)
+        
+        return Job.objects.filter(is_active=True)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        serializer.save(company=self.request.user)
 
+    @action(detail=True, methods=['patch'], permission_classes=[IsEmployerAndOwnerOrReadOnly])
+    def toggle_active(self, request, pk=None):
+        job = self.get_object()
+        job.is_active = not job.is_active
+        job.save()
+        
+        status_msg = "activated" if job.is_active else "deactivated/hidden"
+        return Response(
+            {
+                "detail": f"Job status successfully updated to {status_msg}.",
+                "is_active": job.is_active
+            },
+            status=status.HTTP_200_OK
+        )
 class ApplicationViewSet(viewsets.ModelViewSet):
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer

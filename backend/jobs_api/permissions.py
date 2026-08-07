@@ -29,3 +29,16 @@ class IsJobSeeker(permissions.BasePermission):
             request.user.is_authenticated and 
             request.user.role == 'JOB_SEEKER'
         )        
+class IsEmployerAndOwnerOrReadOnly(permissions.BasePermission):
+   
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        return request.user.is_authenticated and getattr(request.user, 'role', None) == 'employer'
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        return obj.company == request.user
