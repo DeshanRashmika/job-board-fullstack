@@ -50,7 +50,8 @@
 }
 
 .navbar__logo img {
-  height: 60px;
+  padding: 10px 0;
+  height: 40px;
   width: auto;
 }
 
@@ -105,7 +106,6 @@
 
 .navbar__cta { margin-left: 0; }
 
-/* Mobile drawer auth buttons */
 .navbar__drawer-auth {
   display: flex;
   gap: 10px;
@@ -118,7 +118,6 @@
   text-align: center;
 }
 
-/* Hamburger */
 .navbar__hamburger {
   display: none;
   flex-direction: column;
@@ -141,7 +140,6 @@
 .navbar__hamburger.open span:nth-child(2) { opacity: 0; }
 .navbar__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* Drawer */
 .navbar__drawer {
   display: flex;
   flex-direction: column;
@@ -159,13 +157,11 @@
 }
 .navbar__drawer .btn { margin-top: 12px; text-align: center; justify-content: center; }
 
-@media (max-width: 720px) {
+@media (max-width: 720px) { 
   .navbar__links, .navbar__cta { display: none; }
   .navbar__hamburger { display: flex; }
 }
 
-
-/* ── Profile dropdown ────────────────────────────────────────────── */
 .navbar__profile {
   position: relative;
 }
@@ -173,6 +169,7 @@
 .navbar__profile-btn {
   display: inline-flex;
   align-items: center;
+  margin-left: 50%;
   gap: 8px;
   background: none;
   border: 1.5px solid var(--border);
@@ -284,4 +281,40 @@
 .navbar__dropdown-item--danger:hover {
   background: #fff1f1;
   color: #d93025;
+}
+.navbar__employer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--green-dark);
+  position: relative;
+  transition: color var(--trans);
+}
+.navbar__employer-link:hover { color: var(--slate-dark); }
+.navbar__employer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--green-primary);
+  border-radius: 2px;
+  transition: width var(--trans);
+}
+.navbar__employer-link:hover::after { width: 100%; }
+
+.navbar__dropdown-role {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--slate-muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-top: 1px;
+}
+
+.navbar__dropdown-item[href] {
+  text-decoration: none;
 }

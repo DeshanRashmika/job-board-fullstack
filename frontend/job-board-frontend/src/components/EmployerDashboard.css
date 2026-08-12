@@ -1,0 +1,471 @@
+/* ── Dashboard layout ────────────────────────────────────────────── */
+.dashboard {
+  padding-top: 40px;
+  padding-bottom: 80px;
+}
+
+/* ── Hero header ─────────────────────────────────────────────────── */
+.dashboard__hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.dashboard__title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  color: var(--slate-dark);
+  letter-spacing: -0.04em;
+  margin-bottom: 6px;
+}
+
+.dashboard__subtitle {
+  font-size: 15px;
+  color: var(--slate-muted);
+}
+
+/* Stat row */
+.dashboard__stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.dash-stat {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 24px;
+  text-align: center;
+  min-width: 100px;
+  box-shadow: var(--shadow-card);
+}
+
+.dash-stat__num {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.dash-stat__label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--slate-muted);
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────── */
+.dashboard__tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.dashboard__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--slate-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition: color var(--trans), background var(--trans);
+}
+
+.dashboard__tab:hover {
+  color: var(--slate-dark);
+  background: var(--off-white);
+}
+
+.dashboard__tab.active {
+  color: var(--slate-dark);
+  border-bottom-color: var(--green-primary);
+}
+
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  background: var(--green-light);
+  color: var(--green-dark);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ── Panel ───────────────────────────────────────────────────────── */
+.dashboard__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.dashboard__loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--slate-muted);
+  font-size: 14px;
+  padding: 24px 0;
+}
+
+.dashboard__empty {
+  color: var(--slate-muted);
+  font-size: 14px;
+  padding: 32px 0;
+  text-align: center;
+}
+
+/* ── Post Job Form ───────────────────────────────────────────────── */
+.post-job-form {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: var(--shadow-card);
+}
+
+.post-job-form__heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--slate-dark);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.form-error {
+  font-size: 13px;
+  color: #b91c1c;
+  background: #fff1f1;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+.form-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green-dark);
+  background: var(--green-light);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+.pjf__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .pjf__row { grid-template-columns: 1fr; }
+}
+
+.pjf__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pjf__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-dark);
+}
+
+.pjf__optional {
+  font-weight: 400;
+  color: var(--slate-muted);
+  font-size: 12px;
+}
+
+.pjf__input,
+.pjf__select,
+.pjf__textarea {
+  padding: 10px 14px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--slate-dark);
+  background: var(--white);
+  transition: border-color var(--trans), box-shadow var(--trans);
+}
+
+.pjf__select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.pjf__textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.pjf__input::placeholder,
+.pjf__textarea::placeholder { color: var(--slate-subtle); }
+
+.pjf__input:focus,
+.pjf__select:focus,
+.pjf__textarea:focus {
+  outline: none;
+  border-color: var(--green-primary);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.18);
+}
+
+.pjf__submit {
+  align-self: flex-start;
+  gap: 8px;
+  padding: 12px 28px;
+}
+
+/* ── Jobs table ──────────────────────────────────────────────────── */
+.jobs-table-section { display: flex; flex-direction: column; gap: 16px; }
+
+.jobs-table__heading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--slate-dark);
+  letter-spacing: -0.02em;
+}
+
+.jobs-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.jobs-table__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  transition: box-shadow var(--trans), border-color var(--trans);
+  flex-wrap: wrap;
+}
+
+.jobs-table__row.inactive {
+  opacity: 0.6;
+}
+
+.jobs-table__row:hover {
+  box-shadow: var(--shadow-card);
+  border-color: var(--border-strong);
+}
+
+.jobs-table__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.jobs-table__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--slate-dark);
+}
+
+.jobs-table__meta {
+  font-size: 12px;
+  color: var(--slate-muted);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.jobs-table__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.status-pill {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.status-pill--active   { background: var(--green-light); color: var(--green-dark); }
+.status-pill--inactive { background: rgba(148,163,184,.15); color: var(--slate-muted); }
+
+/* Small outline button variant */
+.btn--sm { padding: 7px 14px; font-size: 12px; }
+
+/* ── Applications list ───────────────────────────────────────────── */
+.apps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.app-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow var(--trans);
+}
+
+.app-card:hover { box-shadow: var(--shadow-card); }
+
+.app-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.app-card__applicant {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--slate-dark);
+  margin-bottom: 2px;
+}
+
+.app-card__job-title,
+.app-card__date {
+  font-size: 13px;
+  color: var(--slate-muted);
+}
+
+.app-card__cover {
+  font-size: 13px;
+  color: var(--slate-text);
+  line-height: 1.6;
+  background: var(--off-white);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  border-left: 3px solid var(--green-primary);
+}
+
+.app-card__resume-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green-dark);
+  text-decoration: none;
+  transition: color var(--trans);
+}
+.app-card__resume-link:hover { color: var(--slate-dark); }
+
+.app-card__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Status badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  flex-shrink: 0;
+}
+
+.status--pending  { background: rgba(251,191,36,.12);  color: #b45309; }
+.status--accepted { background: var(--green-light);     color: var(--green-dark); }
+.status--rejected { background: rgba(239,68,68,.10);    color: #b91c1c; }
+
+/* Accept / Reject buttons */
+.btn--accept {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: var(--green-light);
+  color: var(--green-dark);
+  border: 1.5px solid rgba(74,222,128,.4);
+  transition: background var(--trans), transform var(--trans);
+}
+.btn--accept:hover:not(:disabled) {
+  background: rgba(74,222,128,.25);
+  transform: translateY(-1px);
+}
+
+.btn--reject {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1.5px solid rgba(239,68,68,.3);
+  background: rgba(239,68,68,.06);
+  color: #b91c1c;
+  transition: background var(--trans), transform var(--trans);
+}
+.btn--reject:hover:not(:disabled) {
+  background: rgba(239,68,68,.12);
+  transform: translateY(-1px);
+}
+
+.btn--accept:disabled,
+.btn--reject:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Spinner reuse */
+.auth-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2.5px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

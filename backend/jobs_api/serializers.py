@@ -10,7 +10,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         write_only=True,
         required=True,
         style={'input_type': 'password'},
-        min_length=6
+        min_length=6,
     )
 
     class Meta:
@@ -36,22 +36,49 @@ class CompanySerializer(serializers.ModelSerializer):
 
 
 class JobSerializer(serializers.ModelSerializer):
+    # company is a FK to User (the employer). Return the human-readable username,
+    # not just the numeric PK, so the frontend can display the company/poster name.
     company_name = serializers.ReadOnlyField(source='company.username')
 
     class Meta:
         model  = Job
         fields = [
-            'id', 'title', 'description', 'salary', 'location',
-            'job_type', 'category',
-            'company', 'company_name',
-            'is_active', 'created_at',
+            'id',
+            'title',
+            'description',
+            'salary',
+            'location',
+            'job_type',
+            'category',
+            # company is the FK id (write); company_name is the display string (read)
+            'company',
+            'company_name',
+            # external job fields — required so external listings can be imported
+            'is_external',
+            'external_url',
+            'is_active',
+            'created_at',
         ]
         read_only_fields = ['company', 'posted_by', 'created_at']
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
+    # Return applicant's username as a string instead of a PK
     applicant = serializers.ReadOnlyField(source='applicant.username')
+
+    # Include the job title so the employer dashboard can show it
+    # instead of the raw FK integer "Applied for Job #3"
+    job_title = serializers.ReadOnlyField(source='job.title')
 
     class Meta:
         model  = Application
-        fields = '__all__'
+        fields = [
+            'id',
+            'job',
+            'job_title',
+            'applicant',
+            'cover_letter',
+            'status',
+            'applied_at',
+            'resume',
+        ]

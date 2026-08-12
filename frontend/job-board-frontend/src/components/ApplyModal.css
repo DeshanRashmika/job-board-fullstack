@@ -1,0 +1,280 @@
+/* ── Backdrop ────────────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  padding: 20px;
+  animation: fade-in 0.15s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Modal card ──────────────────────────────────────────────────── */
+.modal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slide-up 0.2s ease;
+}
+
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 28px 28px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal__eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--green-dark);
+  margin-bottom: 6px;
+}
+
+.modal__title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--slate-dark);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.modal__subtitle {
+  font-size: 13px;
+  color: var(--slate-muted);
+}
+
+.modal__close {
+  background: none;
+  border: none;
+  color: var(--slate-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  transition: color var(--trans), background var(--trans);
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+.modal__close:hover {
+  color: var(--slate-dark);
+  background: var(--off-white);
+}
+
+/* ── Form ────────────────────────────────────────────────────────── */
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px 28px 28px;
+}
+
+.modal__error {
+  font-size: 13px;
+  color: #b91c1c;
+  background: #fff1f1;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+.modal__info-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1d4ed8;
+  background: rgba(59,130,246,.06);
+  border: 1px solid rgba(59,130,246,.2);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+.modal__inline-link {
+  background: none;
+  border: none;
+  color: var(--green-dark);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  text-decoration: underline;
+}
+
+/* ── Field ───────────────────────────────────────────────────────── */
+.modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal__label-field {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-dark);
+}
+
+.modal__required { color: #ef4444; }
+.modal__optional { font-weight: 400; color: var(--slate-muted); font-size: 12px; }
+
+/* ── File drop ───────────────────────────────────────────────────── */
+.modal__file-drop {
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--slate-muted);
+  font-size: 14px;
+  transition: border-color var(--trans), background var(--trans);
+}
+.modal__file-drop:hover {
+  border-color: var(--green-primary);
+  background: var(--green-light);
+}
+.modal__file-drop--filled {
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 14px 16px;
+  background: var(--green-light);
+  border-color: rgba(74,222,128,.5);
+  border-style: solid;
+  color: var(--green-dark);
+  gap: 10px;
+}
+.modal__file-name {
+  font-size: 13px;
+  font-weight: 600;
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.modal__file-hint {
+  font-size: 11px;
+  color: var(--slate-subtle);
+  margin-top: 2px;
+}
+.modal__file-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--slate-muted);
+  font-size: 13px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: color var(--trans);
+  flex-shrink: 0;
+}
+.modal__file-remove:hover { color: #ef4444; }
+
+/* ── Textarea ────────────────────────────────────────────────────── */
+.modal__textarea {
+  padding: 10px 14px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--slate-dark);
+  background: var(--white);
+  transition: border-color var(--trans), box-shadow var(--trans);
+  resize: vertical;
+  min-height: 110px;
+}
+.modal__textarea::placeholder { color: var(--slate-subtle); }
+.modal__textarea:focus {
+  outline: none;
+  border-color: var(--green-primary);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.18);
+}
+
+/* ── Submit ──────────────────────────────────────────────────────── */
+.modal__submit {
+  width: 100%;
+  justify-content: center;
+  padding: 13px;
+  font-size: 15px;
+  gap: 8px;
+}
+
+/* ── Success ─────────────────────────────────────────────────────── */
+.modal__success {
+  padding: 40px 28px 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal__success-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--green-light);
+  border: 2px solid rgba(74, 222, 128, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green-dark);
+  margin-bottom: 8px;
+}
+
+.modal__success h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--slate-dark);
+  letter-spacing: -0.03em;
+}
+
+.modal__success p {
+  font-size: 14px;
+  color: var(--slate-muted);
+  max-width: 320px;
+  line-height: 1.6;
+}
+
+.modal__done-btn { margin-top: 8px; padding: 12px 32px; }
+
+/* ── Spinner (reused) ────────────────────────────────────────────── */
+.auth-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2.5px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,177 @@
+/* ── Auth Form ───────────────────────────────────────────────────── */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-form__heading {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 800;
+  color: var(--slate-dark);
+  letter-spacing: -0.04em;
+  margin-bottom: 4px;
+}
+
+.auth-form__sub {
+  font-size: 14px;
+  color: var(--slate-muted);
+}
+
+/* ── Banners ────────────────────────────────────────────────────── */
+.auth-form__error,
+.auth-form__success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+}
+
+.auth-form__error {
+  background: #fff1f1;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.auth-form__success {
+  background: var(--green-light);
+  color: var(--green-dark);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+}
+
+/* ── Row (side-by-side fields) ───────────────────────────────────── */
+.auth-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 420px) {
+  .auth-form__row { grid-template-columns: 1fr; }
+}
+
+/* ── Field ───────────────────────────────────────────────────────── */
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-dark);
+}
+
+/* ── Input wrapper ───────────────────────────────────────────────── */
+.auth-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--slate-muted);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.auth-input,
+.auth-select {
+  width: 100%;
+  padding: 11px 12px 11px 38px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--slate-dark);
+  background: var(--white);
+  transition: border-color var(--trans), box-shadow var(--trans);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.auth-input::placeholder {
+  color: var(--slate-subtle);
+}
+
+.auth-input:focus,
+.auth-select:focus {
+  outline: none;
+  border-color: var(--green-primary);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.18);
+}
+
+/* ── Password toggle ─────────────────────────────────────────────── */
+.auth-pw-toggle {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--slate-muted);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color var(--trans);
+}
+.auth-pw-toggle:hover { color: var(--slate-dark); }
+
+/* ── Helper row ──────────────────────────────────────────────────── */
+.auth-form__helper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.auth-form__link {
+  font-size: 12px;
+  color: var(--green-dark);
+  font-weight: 600;
+  transition: color var(--trans);
+}
+.auth-form__link:hover { color: var(--slate-dark); }
+
+/* ── Submit button ───────────────────────────────────────────────── */
+.auth-form__submit {
+  width: 100%;
+  justify-content: center;
+  padding: 13px;
+  font-size: 15px;
+  margin-top: 4px;
+}
+
+/* ── Spinner ─────────────────────────────────────────────────────── */
+.auth-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2.5px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Switch link ─────────────────────────────────────────────────── */
+.auth-form__switch {
+  text-align: center;
+  font-size: 13px;
+  color: var(--slate-muted);
+}
+.auth-form__switch a {
+  color: var(--green-dark);
+  font-weight: 600;
+  transition: color var(--trans);
+}
+.auth-form__switch a:hover { color: var(--slate-dark); }
