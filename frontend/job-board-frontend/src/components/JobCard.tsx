@@ -2,7 +2,6 @@ import { useState } from 'react'
 import ApplyModal from './ApplyModal'
 import './JobCard.css'
 
-// Matches Django JobSerializer fields exactly
 export interface Job {
   id:              number
   title:           string
