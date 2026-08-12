@@ -1,0 +1,124 @@
+/* ── Badges ──────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+.badge--new      { background: var(--green-light); color: var(--green-dark); }
+.badge--green    { background: var(--green-light); color: var(--green-dark); }
+.badge--blue     { background: rgba(59,130,246,.10);  color: #1d4ed8; }
+.badge--purple   { background: rgba(139,92,246,.10);  color: #6d28d9; }
+.badge--orange   { background: rgba(251,146,60,.12);  color: #c2410c; }
+
+/* ITPro.lk external badge */
+.badge--external {
+  background: rgba(14, 165, 233, 0.10);
+  color: #0369a1;
+  gap: 4px;
+}
+
+/* ── Card ────────────────────────────────────────────────────────── */
+.job-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform var(--trans), box-shadow var(--trans), border-color var(--trans);
+}
+.job-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card), 0 8px 30px rgba(0,0,0,.08);
+  border-color: rgba(74, 222, 128, 0.35);
+}
+
+/* External job card has a subtle blue-tinted left border */
+.job-card--external {
+  border-left: 3px solid #38bdf8;
+}
+.job-card--external:hover {
+  border-color: #38bdf8;
+  box-shadow: var(--shadow-card), 0 8px 30px rgba(14, 165, 233, 0.12);
+}
+
+/* Header */
+.job-card__header { display: flex; gap: 16px; align-items: flex-start; }
+.job-card__meta   { flex: 1; min-width: 0; }
+
+.job-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.job-card__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--slate-dark);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.job-card__company {
+  font-size: 13px;
+  color: var(--green-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* Description */
+.job-card__desc {
+  font-size: 14px;
+  color: var(--slate-muted);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Details row */
+.job-card__details { display: flex; flex-wrap: wrap; gap: 16px; }
+.job-card__detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--slate-text);
+  font-weight: 500;
+}
+.job-card__detail svg         { color: var(--green-primary); flex-shrink: 0; }
+.job-card__detail--muted      { color: var(--slate-muted); }
+.job-card__detail--muted svg  { color: var(--slate-muted); }
+
+/* CTA */
+.job-card__cta {
+  align-self: flex-start;
+  margin-top: 4px;
+  gap: 6px;
+}
+
+/* External "View on ITPro.lk" button */
+.btn--external {
+  background: rgba(14, 165, 233, 0.10);
+  color: #0369a1;
+  border: 1.5px solid rgba(14, 165, 233, 0.30);
+  text-decoration: none;
+}
+.btn--external:hover {
+  background: rgba(14, 165, 233, 0.18);
+  border-color: #38bdf8;
+  color: #0369a1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.18);
+}
