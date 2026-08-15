@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ApplyModal from './ApplyModal'
-import './JobCard.css'
+import '../styles/JobCard.css'
 
 export interface Job {
   id:              number
@@ -48,7 +48,14 @@ interface JobCardProps {
 
 export default function JobCard({ job }: JobCardProps) {
   const [modalOpen, setModalOpen] = useState(false)
-  const isNew      = (Date.now() - new Date(job.created_at).getTime()) < 3 * 86_400_000
+  const [isNew] = useState(() => {
+
+    const createdTime = new Date(job.created_at).getTime()
+    const THREE_DAYS_MS = 3 * 86_400_000
+    
+    return Date.now() - createdTime < THREE_DAYS_MS
+  })
+
   const isExternal = job.is_external && !!job.external_url
 
   return (
@@ -124,26 +131,22 @@ export default function JobCard({ job }: JobCardProps) {
           </span>
         </div>
 
-        {/* ── CTA ── */}
+
         {isExternal ? (
-          /* External job → open itpro.lk in new tab */
-          <a
-            href={job.external_url!}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn--external job-card__cta"
-            aria-label={`View ${job.title} on ITPro.lk (opens in new tab)`}
+
+          <button
+            className="btn btn--primary job-card__cta"
+            onClick={() => setModalOpen(true)}
           >
-            View on ITPro.lk
+            Apply Now
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24"
               stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round"
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4
-                   M14 4h6m0 0v6m0-6L10 14" />
+                d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </a>
+          </button>
         ) : (
-          /* Local job → apply modal */
+
           <button
             className="btn btn--primary job-card__cta"
             onClick={() => setModalOpen(true)}
@@ -158,7 +161,6 @@ export default function JobCard({ job }: JobCardProps) {
         )}
       </article>
 
-      {/* Apply modal — only for local jobs */}
       {!isExternal && modalOpen && (
         <ApplyModal job={job} onClose={() => setModalOpen(false)} />
       )}

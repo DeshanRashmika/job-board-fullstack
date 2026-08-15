@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import JobListings from './components/JobListings'
+import JobListings from './pages/JobListings'
 import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
-import EmployerDashboard from './components/EmployerDashboard'
-import ProtectedRoute from './components/ProtectedRoute'
-import './App.css'
+import EmployerDashboard from './pages/EmployerDashboard'
+import ProtectedRoute from './components/routes/ProtectedRoute'
+import '../src/styles/App.css'
 
-/* ── Page layouts ──────────────────────────────────────────────────── */
+
 function HomePage() {
   return (
     <>
@@ -36,7 +36,7 @@ function AuthPage({ children }: { children: React.ReactNode }) {
   )
 }
 
-/* ── App ───────────────────────────────────────────────────────────── */
+
 export default function App() {
   return (
     <BrowserRouter>

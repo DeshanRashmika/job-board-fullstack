@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import './Auth.css'
+import '../styles/Auth.css'
 
 type Status = 'idle' | 'loading' | 'error'
 
@@ -13,7 +13,6 @@ export default function LoginForm() {
   const [status, setStatus]     = useState<Status>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
-  // Redirect back to the page they tried to access, or home
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? '/'
 
   async function handleSubmit(e: React.FormEvent) {
@@ -34,7 +33,6 @@ export default function LoginForm() {
         throw new Error(data?.detail || 'Invalid username or password.')
       }
 
-      // Store tokens, username, and role
       localStorage.setItem('access_token',  data.access)
       localStorage.setItem('refresh_token', data.refresh)
       localStorage.setItem('username',      data.username ?? username)
