@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Job } from './JobCard'
-import './ApplyModal.css'
+import '../styles/ApplyModal.css'
 
 interface ApplyModalProps {
   job: Job
@@ -21,7 +21,7 @@ export default function ApplyModal({ job, onClose }: ApplyModalProps) {
 
   const token = localStorage.getItem('access_token')
 
-  // Close on Escape
+
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
@@ -30,7 +30,7 @@ export default function ApplyModal({ job, onClose }: ApplyModalProps) {
     return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  // Lock body scroll while open
+
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = '' }
@@ -44,7 +44,7 @@ export default function ApplyModal({ job, onClose }: ApplyModalProps) {
     e.preventDefault()
     setError('')
 
-    // Must be logged in
+
     if (!token) {
       onClose()
       navigate('/login')
@@ -58,7 +58,7 @@ export default function ApplyModal({ job, onClose }: ApplyModalProps) {
 
     setStatus('loading')
 
-    // Use FormData — the API expects multipart because of the resume FileField
+
     const body = new FormData()
     body.append('job', String(job.id))
     body.append('resume', resume)
@@ -68,7 +68,6 @@ export default function ApplyModal({ job, onClose }: ApplyModalProps) {
       const res = await fetch('http://localhost:8000/api/applications/', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
-        // Do NOT set Content-Type manually — let the browser set multipart boundary
         body,
       })
 

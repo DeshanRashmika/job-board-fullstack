@@ -3,9 +3,9 @@ import JobCard from './JobCard'
 import type { Job } from './JobCard'
 import './JobListings.css'
 
-const API          = 'http://localhost:8000/api'
-const PAGE_SIZE    = 15
-const MAX_PAGES_SHOWN = 7   // max numbered buttons before we use ellipsis
+const API             = 'http://localhost:8000/api'
+const PAGE_SIZE       = 12 
+const MAX_PAGES_SHOWN = 7  
 
 type Status = 'loading' | 'ok' | 'error'
 
@@ -17,23 +17,20 @@ const JOB_TYPES = [
   { value: 'CONTRACT',  label: 'Contract'   },
 ]
 
-// Shape of DRF paginated response from JobPagination
 interface PagedResponse {
   count:       number
-  total_pages: number
+  total_pages?: number
   next:        string | null
   previous:    string | null
   results:     Job[]
 }
 
-// Build the page-number button list with ellipsis gaps
-// e.g. [1, '…', 4, 5, 6, '…', 12]
 function buildPageRange(current: number, total: number): (number | '…')[] {
   if (total <= MAX_PAGES_SHOWN) {
     return Array.from({ length: total }, (_, i) => i + 1)
   }
   const pages: (number | '…')[] = []
-  const delta = 2   // pages around current
+  const delta = 2   
   const left  = Math.max(2, current - delta)
   const right = Math.min(total - 1, current + delta)
 
@@ -56,10 +53,8 @@ export default function JobListings() {
   const [jobType,    setJobType]    = useState('')
   const [location,   setLocation]   = useState('')
 
-  // ref to the section top for smooth scroll-to-top on page change
   const sectionRef = useRef<HTMLElement>(null)
 
-  // ── Fetch ──────────────────────────────────────────────────────────
   const fetchJobs = useCallback(async (targetPage: number) => {
     setStatus('loading')
     try {
@@ -73,45 +68,39 @@ export default function JobListings() {
       if (!res.ok) throw new Error(`Server error: ${res.status}`)
 
       const raw = await res.json()
-
-      // Handle both:
-      //   - paginated:  { count, total_pages, next, previous, results: [...] }
-      //   - plain list: [...] (old server / unpaginated fallback)
       const data: PagedResponse = Array.isArray(raw)
         ? { count: raw.length, total_pages: 1, next: null, previous: null, results: raw }
         : raw
 
-      setJobs(data.results       ?? [])
-      setTotalCount(data.count       ?? 0)
-      setTotalPages(data.total_pages ?? 1)
+      setJobs(data.results ?? [])
+      
+      const count = data.count ?? 0
+      setTotalCount(count)
+      
+      const computedTotalPages = data.total_pages ?? Math.ceil(count / PAGE_SIZE)
+      setTotalPages(computedTotalPages > 0 ? computedTotalPages : 1)
+      
       setStatus('ok')
     } catch {
       setStatus('error')
     }
   }, [search, jobType, location])
 
-  // When filters change → reset to page 1 with 400ms debounce
   useEffect(() => {
     setPage(1)
     const t = setTimeout(() => fetchJobs(1), 400)
     return () => clearTimeout(t)
   }, [search, jobType, location, fetchJobs])
 
-  // When page changes (but filters haven't) → fetch immediately, scroll up
   const isFirstRender = useRef(true)
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false
-      return   // already handled by the filter effect above on mount
+      return  
     }
     fetchJobs(page)
     sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [page]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // ── Handlers ──────────────────────────────────────────────────────
-  function handleSearchKey(e: React.KeyboardEvent) {
-    if (e.key === 'Enter') { setPage(1); fetchJobs(1) }
-  }
+  }, [page]) 
 
   function goToPage(p: number) {
     if (p < 1 || p > totalPages || p === page) return
@@ -130,7 +119,6 @@ export default function JobListings() {
   const startItem    = totalCount === 0 ? 0 : (page - 1) * PAGE_SIZE + 1
   const endItem      = Math.min(page * PAGE_SIZE, totalCount)
 
-  // ── Render ─────────────────────────────────────────────────────────
   return (
     <section id="jobs" className="container job-listings-section" ref={sectionRef}>
 
@@ -161,7 +149,6 @@ export default function JobListings() {
             placeholder="Search by title, skill…"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            onKeyDown={handleSearchKey}
             aria-label="Search jobs"
           />
         </div>
@@ -176,12 +163,10 @@ export default function JobListings() {
               d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
           <input
-            className="jls__search"
             type="text"
             placeholder="Location…"
             value={location}
             onChange={e => setLocation(e.target.value)}
-            onKeyDown={handleSearchKey}
             aria-label="Filter by location"
           />
         </div>
@@ -253,7 +238,7 @@ export default function JobListings() {
             ))}
           </div>
 
-          {/* ── Pagination bar (only when there's more than one page) ── */}
+          {/* ── Pagination bar ── */}
           {totalPages > 1 && (
             <nav className="jls__pagination" aria-label="Job listings pages">
 
