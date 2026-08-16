@@ -1,4 +1,4 @@
-/* ── Badges ──────────────────────────────────────────────────────── */
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -16,14 +16,12 @@
 .badge--purple   { background: rgba(139,92,246,.10);  color: #6d28d9; }
 .badge--orange   { background: rgba(251,146,60,.12);  color: #c2410c; }
 
-/* ITPro.lk external badge */
 .badge--external {
   background: rgba(14, 165, 233, 0.10);
   color: #0369a1;
   gap: 4px;
 }
 
-/* ── Card ────────────────────────────────────────────────────────── */
 .job-card {
   background: var(--white);
   border: 1px solid var(--border);
@@ -40,7 +38,6 @@
   border-color: rgba(74, 222, 128, 0.35);
 }
 
-/* External job card has a subtle blue-tinted left border */
 .job-card--external {
   border-left: 3px solid #38bdf8;
 }
@@ -49,7 +46,6 @@
   box-shadow: var(--shadow-card), 0 8px 30px rgba(14, 165, 233, 0.12);
 }
 
-/* Header */
 .job-card__header { display: flex; gap: 16px; align-items: flex-start; }
 .job-card__meta   { flex: 1; min-width: 0; }
 
@@ -76,7 +72,6 @@
   letter-spacing: .5px;
 }
 
-/* Description */
 .job-card__desc {
   font-size: 14px;
   color: var(--slate-muted);
@@ -87,7 +82,6 @@
   overflow: hidden;
 }
 
-/* Details row */
 .job-card__details { display: flex; flex-wrap: wrap; gap: 16px; }
 .job-card__detail {
   display: inline-flex;
@@ -101,14 +95,12 @@
 .job-card__detail--muted      { color: var(--slate-muted); }
 .job-card__detail--muted svg  { color: var(--slate-muted); }
 
-/* CTA */
 .job-card__cta {
   align-self: flex-start;
   margin-top: 4px;
   gap: 6px;
 }
 
-/* External "View on ITPro.lk" button */
 .btn--external {
   background: rgba(14, 165, 233, 0.10);
   color: #0369a1;

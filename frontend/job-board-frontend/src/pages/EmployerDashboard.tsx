@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import type { Job } from './JobCard'
-import './EmployerDashboard.css'
+import type { Job } from '../components/JobCard'
+import '../styles/EmployerDashboard.css'
 
 const API = 'http://localhost:8000/api'
 
@@ -12,31 +12,29 @@ interface Application {
   cover_letter: string | null
   status: 'PENDING' | 'ACCEPTED' | 'REJECTED'
   applied_at: string
-  resume: string
+  resume_url: string
 }
-
 type Tab = 'jobs' | 'applications'
 type PostStatus = 'idle' | 'loading' | 'success' | 'error'
 
 const JOB_TYPES = [
   { value: 'FULL_TIME', label: 'Full Time' },
   { value: 'PART_TIME', label: 'Part Time' },
-  { value: 'REMOTE',    label: 'Remote' },
-  { value: 'CONTRACT',  label: 'Contract' },
+  { value: 'REMOTE', label: 'Remote' },
+  { value: 'CONTRACT', label: 'Contract' },
 ]
 
 const STATUS_COLORS: Record<Application['status'], string> = {
-  PENDING:  'status--pending',
+  PENDING: 'status--pending',
   ACCEPTED: 'status--accepted',
   REJECTED: 'status--rejected',
 }
 
-function authHeaders() {
+function authHeaders(): Record<string, string> {
   const token = localStorage.getItem('access_token')
   return token ? { Authorization: `Bearer ${token}` } : {}
 }
 
-// ── Post Job Form ────────────────────────────────────────────────────
 interface PostJobFormProps {
   onSuccess: () => void
 }
@@ -46,7 +44,7 @@ function PostJobForm({ onSuccess }: PostJobFormProps) {
     title: '', description: '', location: '', salary: '', job_type: 'FULL_TIME',
   })
   const [status, setStatus] = useState<PostStatus>('idle')
-  const [error, setError]   = useState('')
+  const [error, setError] = useState('')
 
   function set(field: string) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -163,15 +161,14 @@ function PostJobForm({ onSuccess }: PostJobFormProps) {
   )
 }
 
-// ── Main Dashboard ───────────────────────────────────────────────────
 export default function EmployerDashboard() {
-  const [tab, setTab]               = useState<Tab>('jobs')
-  const [jobs, setJobs]             = useState<Job[]>([])
-  const [applications, setApps]     = useState<Application[]>([])
-  const [loadingJobs, setLoadingJobs]   = useState(true)
-  const [loadingApps, setLoadingApps]   = useState(true)
+  const [tab, setTab] = useState<Tab>('jobs')
+  const [jobs, setJobs] = useState<Job[]>([])
+  const [applications, setApps] = useState<Application[]>([])
+  const [loadingJobs, setLoadingJobs] = useState(true)
+  const [loadingApps, setLoadingApps] = useState(true)
   const [togglingId, setTogglingId] = useState<number | null>(null)
-  const [updatingApp, setUpdatingApp]   = useState<number | null>(null)
+  const [updatingApp, setUpdatingApp] = useState<number | null>(null)
 
   const fetchJobs = useCallback(async () => {
     setLoadingJobs(true)
@@ -182,7 +179,7 @@ export default function EmployerDashboard() {
       const data = await res.json()
       setJobs(Array.isArray(data) ? data : data.results ?? [])
     } catch { /* ignore */ }
-    finally  { setLoadingJobs(false) }
+    finally { setLoadingJobs(false) }
   }, [])
 
   const fetchApplications = useCallback(async () => {
@@ -195,10 +192,10 @@ export default function EmployerDashboard() {
       const apps: Application[] = Array.isArray(data) ? data : data.results ?? []
       setApps(apps)
     } catch { /* ignore */ }
-    finally  { setLoadingApps(false) }
+    finally { setLoadingApps(false) }
   }, [])
 
-  useEffect(() => { fetchJobs() },         [fetchJobs])
+  useEffect(() => { fetchJobs() }, [fetchJobs])
   useEffect(() => { fetchApplications() }, [fetchApplications])
 
   async function toggleActive(job: Job) {
@@ -284,7 +281,6 @@ export default function EmployerDashboard() {
         </button>
       </div>
 
-      {/* ── Tab: Jobs ── */}
       {tab === 'jobs' && (
         <div className="dashboard__panel">
           <PostJobForm onSuccess={fetchJobs} />
@@ -327,7 +323,7 @@ export default function EmployerDashboard() {
         </div>
       )}
 
-      {/* ── Tab: Applications ── */}
+
       {tab === 'applications' && (
         <div className="dashboard__panel">
           <h3 className="jobs-table__heading">Received Applications</h3>
@@ -364,9 +360,9 @@ export default function EmployerDashboard() {
                     <p className="app-card__cover">{app.cover_letter}</p>
                   )}
 
-                  {app.resume && (
+                  {app.resume_url && (
                     <a
-                      href={`http://localhost:8000${app.resume}`}
+                      href={app.resume_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="app-card__resume-link"

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../assets/catalyst-logo.jpg.svg'
-import './Navbar.css'
+import '../styles/Navbar.css'
 
 function IconBriefcase() {
   return (

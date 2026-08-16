@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import JobCard from './JobCard'
-import type { Job } from './JobCard'
-import './JobListings.css'
+import JobCard from '../components/JobCard'
+import type { Job } from '../components/JobCard'
+import '../styles/JobListings.css'
 
 const API             = 'http://localhost:8000/api'
 const PAGE_SIZE       = 12 
@@ -87,7 +87,6 @@ export default function JobListings() {
   }, [search, jobType, location])
 
   useEffect(() => {
-    setPage(1)
     const t = setTimeout(() => fetchJobs(1), 400)
     return () => clearTimeout(t)
   }, [search, jobType, location, fetchJobs])

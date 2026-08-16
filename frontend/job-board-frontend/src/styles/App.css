@@ -1,4 +1,4 @@
-/* ── App Shell ───────────────────────────────────────────────────── */
+
 .app-shell {
   min-height: 100vh;
   display: flex;
@@ -11,13 +11,13 @@
   padding: 60px 0 80px;
 }
 
-/* Employer dashboard gets its own top-level padding */
+
 .app-shell > div.dashboard,
 .app-shell > .dashboard {
   flex: 1;
 }
 
-/* ── Section headings ─────────────────────────────────────────────── */
+
 .section-heading {
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   font-weight: 800;
@@ -26,14 +26,14 @@
   margin-bottom: 32px;
 }
 
-/* ── Job listings grid ────────────────────────────────────────────── */
+
 .job-listings {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
 }
 
-/* ── Auth page ────────────────────────────────────────────────────── */
+
 .auth-page {
   flex: 1;
   display: flex;
@@ -61,7 +61,7 @@
   }
 }
 
-/* ── Footer ───────────────────────────────────────────────────────── */
+
 .site-footer {
   border-top: 1px solid var(--border);
   background: var(--white);
