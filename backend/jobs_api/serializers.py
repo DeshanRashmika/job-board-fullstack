@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Job, JobCategory, Company, Application
+from .supabase_client import upload_resume_to_supabase
 
 User = get_user_model()
 
@@ -36,8 +37,6 @@ class CompanySerializer(serializers.ModelSerializer):
 
 
 class JobSerializer(serializers.ModelSerializer):
-    # company is a FK to User (the employer). Return the human-readable username,
-    # not just the numeric PK, so the frontend can display the company/poster name.
     company_name = serializers.ReadOnlyField(source='company.username')
 
     class Meta:
@@ -50,10 +49,8 @@ class JobSerializer(serializers.ModelSerializer):
             'location',
             'job_type',
             'category',
-            # company is the FK id (write); company_name is the display string (read)
             'company',
             'company_name',
-            # external job fields — required so external listings can be imported
             'is_external',
             'external_url',
             'is_active',
@@ -63,22 +60,19 @@ class JobSerializer(serializers.ModelSerializer):
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    # Return applicant's username as a string instead of a PK
     applicant = serializers.ReadOnlyField(source='applicant.username')
-
-    # Include the job title so the employer dashboard can show it
-    # instead of the raw FK integer "Applied for Job #3"
     job_title = serializers.ReadOnlyField(source='job.title')
+    resume = serializers.FileField(write_only=True, required=True)
 
     class Meta:
         model  = Application
         fields = [
-            'id',
-            'job',
-            'job_title',
-            'applicant',
-            'cover_letter',
-            'status',
-            'applied_at',
-            'resume',
+            'id', 'job', 'job_title', 'applicant', 'cover_letter',
+            'status', 'applied_at', 'resume', 'resume_url',
         ]
+        read_only_fields = ['resume_url']
+
+    def create(self, validated_data):
+        resume_file = validated_data.pop('resume')
+        validated_data['resume_url'] = upload_resume_to_supabase(resume_file)
+        return super().create(validated_data)
